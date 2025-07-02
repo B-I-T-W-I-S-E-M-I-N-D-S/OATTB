@@ -16,17 +16,49 @@ from dataset import VideoDataSet
 from models import MYNET, SuppressNet
 from loss_func import cls_loss_func, regress_loss_func
 
+# Helper function to convert non-serializable types to JSON-serializable types
+def convert_to_serializable(obj):
+    if isinstance(obj, np.floating):  # Handles float32, float64, etc.
+        return float(obj)
+    elif isinstance(obj, np.integer):  # Handles int32, int64, etc.
+        return int(obj)
+    elif isinstance(obj, np.ndarray):  # Handles NumPy arrays
+        return obj.tolist()
+    elif isinstance(obj, list):  # Recursively process lists
+        return [convert_to_serializable(item) for item in obj]
+    elif isinstance(obj, dict):  # Recursively process dictionaries
+        return {key: convert_to_serializable(value) for key, value in obj.items()}
+    return obj
+
+def eval_one_epoch(opt, model, test_dataset):
+    cls_loss, reg_loss, tot_loss, output_cls, output_reg, labels_cls, labels_reg, working_time, total_frames = eval_frame(opt, model, test_dataset)
+        
+    result_dict = eval_map_nms(opt, test_dataset, output_cls, output_reg, labels_cls, labels_reg)
+    output_dict = {"version": "VERSION 1.3", "results": result_dict, "external_data": {}}
+    
+    # Convert output_dict to ensure all values are JSON-serializable
+    output_dict = convert_to_serializable(output_dict)
+    
+    outfile = open(opt["result_file"], "w")
+    json.dump(output_dict, outfile, indent=2)
+    outfile.close()
+    
+    IoUmAP = evaluation_detection(opt, verbose=False)
+    IoUmAP_5 = sum(IoUmAP[0:]) / len(IoUmAP[0:])
+    return cls_loss, reg_loss, tot_loss, IoUmAP_5
+
+# Rest of your code remains unchanged
 def train_one_epoch(opt, model, train_dataset, optimizer, warmup=False):
     train_loader = torch.utils.data.DataLoader(train_dataset,
                                                 batch_size=opt['batch_size'], shuffle=True,
-                                                num_workers=0, pin_memory=True,drop_last=False)      
+                                                num_workers=0, pin_memory=True, drop_last=False)      
     epoch_cost = 0
     epoch_cost_cls = 0
     epoch_cost_reg = 0
     
-    total_iter = len(train_dataset)//opt['batch_size']
+    total_iter = len(train_dataset) // opt['batch_size']
     
-    for n_iter,(input_data,cls_label,reg_label) in enumerate(train_loader):
+    for n_iter, (input_data, cls_label, reg_label) in enumerate(train_loader):
         if warmup:
             for g in optimizer.param_groups:
                 g['lr'] = n_iter * (opt['lr']) / total_iter
@@ -36,16 +68,15 @@ def train_one_epoch(opt, model, train_dataset, optimizer, warmup=False):
         cost_reg = 0
         cost_cls = 0
         
-        loss = cls_loss_func(cls_label,act_cls)
+        loss = cls_loss_func(cls_label, act_cls)
         cost_cls = loss
-            
-        epoch_cost_cls+= cost_cls.detach().cpu().numpy()    
+        epoch_cost_cls += cost_cls.detach().cpu().numpy()    
                
-        loss = regress_loss_func(reg_label,act_reg)
+        loss = regress_loss_func(reg_label, act_reg)
         cost_reg = loss  
         epoch_cost_reg += cost_reg.detach().cpu().numpy()   
         
-        cost= opt['alpha']*cost_cls +opt['beta']*cost_reg    
+        cost = opt['alpha'] * cost_cls + opt['beta'] * cost_reg    
                 
         epoch_cost += cost.detach().cpu().numpy() 
         
@@ -55,59 +86,48 @@ def train_one_epoch(opt, model, train_dataset, optimizer, warmup=False):
                 
     return n_iter, epoch_cost, epoch_cost_cls, epoch_cost_reg
 
-def eval_one_epoch(opt, model, test_dataset):
-    cls_loss, reg_loss, tot_loss, output_cls, output_reg, labels_cls, labels_reg, working_time, total_frames = eval_frame(opt, model,test_dataset)
-        
-    result_dict = eval_map_nms(opt,test_dataset, output_cls, output_reg, labels_cls, labels_reg)
-    output_dict={"version":"VERSION 1.3","results":result_dict,"external_data":{}}
-    outfile=open(opt["result_file"],"w")
-    json.dump(output_dict,outfile, indent=2)
-    outfile.close()
-    
-    IoUmAP = evaluation_detection(opt, verbose=False)
-    IoUmAP_5=sum(IoUmAP[0:])/len(IoUmAP[0:])
-    return cls_loss, reg_loss, tot_loss, IoUmAP_5
-
-    
 def train(opt): 
     writer = SummaryWriter()
     model = MYNET(opt).cuda()
     
-    optimizer = optim.Adam( model.parameters(),lr=opt["lr"],weight_decay = opt["weight_decay"])      
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer,step_size = opt["lr_step"])
+    optimizer = optim.Adam(model.parameters(), lr=opt["lr"], weight_decay=opt["weight_decay"])      
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=opt["lr_step"])
     
-    train_dataset = VideoDataSet(opt,subset="train")      
-    test_dataset = VideoDataSet(opt,subset=opt['inference_subset'])
+    train_dataset = VideoDataSet(opt, subset="train")      
+    test_dataset = VideoDataSet(opt, subset=opt['inference_subset'])
     
-    warmup=False
+    warmup = False
     
     for n_epoch in range(opt['epoch']):   
-        if n_epoch >=1:
-            warmup=False
+        if n_epoch >= 1:
+            warmup = False
         
         n_iter, epoch_cost, epoch_cost_cls, epoch_cost_reg = train_one_epoch(opt, model, train_dataset, optimizer, warmup)
             
-        writer.add_scalars('data/cost', {'train': epoch_cost/(n_iter+1)}, n_epoch)
-        print("training loss(epoch %d): %.03f, cls - %f, reg - %f, lr - %f"%(n_epoch,
-                                                                            epoch_cost/(n_iter+1),
-                                                                            epoch_cost_cls/(n_iter+1),
-                                                                            epoch_cost_reg/(n_iter+1),
-                                                                            optimizer.param_groups[0]["lr"]) )
+        writer.add_scalars('data/cost', {'train': epoch_cost / (n_iter + 1)}, n_epoch)
+        print("training loss(epoch %d): %.03f, cls - %f, reg - %f, lr - %f" % (
+            n_epoch,
+            epoch_cost / (n_iter + 1),
+            epoch_cost_cls / (n_iter + 1),
+            epoch_cost_reg / (n_iter + 1),
+            optimizer.param_groups[0]["lr"]
+        ))
         
         scheduler.step()
         model.eval()
         
-        cls_loss, reg_loss, tot_loss, IoUmAP_5 = eval_one_epoch(opt, model,test_dataset)
+        cls_loss, reg_loss, tot_loss, IoUmAP_5 = eval_one_epoch(opt, model, test_dataset)
         
         writer.add_scalars('data/mAP', {'test': IoUmAP_5}, n_epoch)
-        print("testing loss(epoch %d): %.03f, cls - %f, reg - %f, mAP Avg - %f"%(n_epoch,tot_loss, cls_loss, reg_loss, IoUmAP_5))
+        print("testing loss(epoch %d): %.03f, cls - %f, reg - %f, mAP Avg - %f" % (
+            n_epoch, tot_loss, cls_loss, reg_loss, IoUmAP_5
+        ))
                     
-        state = {'epoch': n_epoch + 1,
-                    'state_dict': model.state_dict()}
-        torch.save(state, opt["checkpoint_path"]+"/checkpoint.pth.tar" )
+        state = {'epoch': n_epoch + 1, 'state_dict': model.state_dict()}
+        torch.save(state, opt["checkpoint_path"] + "/checkpoint.pth.tar")
         if IoUmAP_5 > model.best_map:
             model.best_map = IoUmAP_5
-            torch.save(state, opt["checkpoint_path"]+"/ckp_best.pth.tar" )
+            torch.save(state, opt["checkpoint_path"] + "/ckp_best.pth.tar")
             
         model.train()
                 
@@ -116,118 +136,114 @@ def train(opt):
 
 def eval_frame(opt, model, dataset):
     test_loader = torch.utils.data.DataLoader(dataset,
-                                                batch_size=opt['batch_size'], shuffle=False,
-                                                num_workers=0, pin_memory=True,drop_last=False)
+                                             batch_size=opt['batch_size'], shuffle=False,
+                                             num_workers=0, pin_memory=True, drop_last=False)
     
-    labels_cls={}
-    labels_reg={}
-    output_cls={}
-    output_reg={}                                      
+    labels_cls = {}
+    labels_reg = {}
+    output_cls = {}
+    output_reg = {}                                      
     for video_name in dataset.video_list:
-        labels_cls[video_name]=[]
-        labels_reg[video_name]=[]
-        output_cls[video_name]=[]
-        output_reg[video_name]=[]
+        labels_cls[video_name] = []
+        labels_reg[video_name] = []
+        output_cls[video_name] = []
+        output_reg[video_name] = []
         
     start_time = time.time()
-    total_frames =0  
+    total_frames = 0  
     epoch_cost = 0
     epoch_cost_cls = 0
     epoch_cost_reg = 0   
     
-    for n_iter,(input_data,cls_label,reg_label) in enumerate(test_loader):
+    for n_iter, (input_data, cls_label, reg_label) in enumerate(test_loader):
         act_cls, act_reg = model(input_data.cuda())
         
         cost_reg = 0
         cost_cls = 0
         
-        loss = cls_loss_func(cls_label,act_cls)
+        loss = cls_loss_func(cls_label, act_cls)
         cost_cls = loss
-            
-        epoch_cost_cls+= cost_cls.detach().cpu().numpy()    
+        epoch_cost_cls += cost_cls.detach().cpu().numpy()    
                
-        loss = regress_loss_func(reg_label,act_reg)
+        loss = regress_loss_func(reg_label, act_reg)
         cost_reg = loss  
         epoch_cost_reg += cost_reg.detach().cpu().numpy()   
         
-        cost= opt['alpha']*cost_cls +opt['beta']*cost_reg    
-                
+        cost = opt['alpha'] * cost_cls + opt['beta'] * cost_reg    
         epoch_cost += cost.detach().cpu().numpy() 
         
         act_cls = torch.softmax(act_cls, dim=-1)
         
-        total_frames+=input_data.size(0)
+        total_frames += input_data.size(0)
         
-        for b in range(0,input_data.size(0)):
-            video_name, st, ed, data_idx = dataset.inputs[n_iter*opt['batch_size']+b]
-            output_cls[video_name]+=[act_cls[b,:].detach().cpu().numpy()]
-            output_reg[video_name]+=[act_reg[b,:].detach().cpu().numpy()]
-            labels_cls[video_name]+=[cls_label[b,:].numpy()]
-            labels_reg[video_name]+=[reg_label[b,:].numpy()]
+        for b in range(0, input_data.size(0)):
+            video_name, st, ed, data_idx = dataset.inputs[n_iter * opt['batch_size'] + b]
+            output_cls[video_name] += [act_cls[b, :].detach().cpu().numpy()]
+            output_reg[video_name] += [act_reg[b, :].detach().cpu().numpy()]
+            labels_cls[video_name] += [cls_label[b, :].numpy()]
+            labels_reg[video_name] += [reg_label[b, :].numpy()]
         
     end_time = time.time()
-    working_time = end_time-start_time
+    working_time = end_time - start_time
     
     for video_name in dataset.video_list:
-        labels_cls[video_name]=np.stack(labels_cls[video_name], axis=0)
-        labels_reg[video_name]=np.stack(labels_reg[video_name], axis=0)
-        output_cls[video_name]=np.stack(output_cls[video_name], axis=0)
-        output_reg[video_name]=np.stack(output_reg[video_name], axis=0)
+        labels_cls[video_name] = np.stack(labels_cls[video_name], axis=0)
+        labels_reg[video_name] = np.stack(labels_reg[video_name], axis=0)
+        output_cls[video_name] = np.stack(output_cls[video_name], axis=0)
+        output_reg[video_name] = np.stack(output_reg[video_name], axis=0)
     
-    cls_loss=epoch_cost_cls/n_iter
-    reg_loss=epoch_cost_reg/n_iter
-    tot_loss=epoch_cost/n_iter
+    cls_loss = epoch_cost_cls / n_iter
+    reg_loss = epoch_cost_reg / n_iter
+    tot_loss = epoch_cost / n_iter
      
     return cls_loss, reg_loss, tot_loss, output_cls, output_reg, labels_cls, labels_reg, working_time, total_frames
 
-
-def eval_map_nms(opt, dataset, output_cls, output_reg, labels_cls, labels_reg):
-    result_dict={}
-    proposal_dict=[]
+def eval_map_nms(opt, dataset, output_cls, output_reg, labels_cls26, labels_reg):
+    result_dict = {}
+    proposal_dict = []
     
     num_class = opt["num_of_class"]
     unit_size = opt['segment_size']
-    threshold=opt['threshold']
-    anchors=opt['anchors']
+    threshold = opt['threshold']
+    anchors = opt['anchors']
                                              
     for video_name in dataset.video_list:
         duration = dataset.video_len[video_name]
         video_time = float(dataset.video_dict[video_name]["duration"])
-        frame_to_time = 100.0*video_time / duration
+        frame_to_time = 100.0 * video_time / duration
          
-        for idx in range(0,duration):
+        for idx in range(0, duration):
             cls_anc = output_cls[video_name][idx]
             reg_anc = output_reg[video_name][idx]
             
-            proposal_anc_dict=[]
-            for anc_idx in range(0,len(anchors)):
-                cls = np.argwhere(cls_anc[anc_idx][:-1]>opt['threshold']).reshape(-1)
+            proposal_anc_dict = []
+            for anc_idx in range(0, len(anchors)):
+                cls = np.argwhere(cls_anc[anc_idx][:-1] > opt['threshold']).reshape(-1)
                 
                 if len(cls) == 0:
                     continue
                     
-                ed= idx + anchors[anc_idx] * reg_anc[anc_idx][0]
-                length = anchors[anc_idx]* np.exp(reg_anc[anc_idx][1])
-                st= ed-length
+                ed = idx + anchors[anc_idx] * reg_anc[anc_idx][0]
+                length = anchors[anc_idx] * np.exp(reg_anc[anc_idx][1])
+                st = ed - length
                 
-                for cidx in range(0,len(cls)):
-                    label=cls[cidx]
-                    tmp_dict={}
-                    tmp_dict["segment"] = [st*frame_to_time/100.0, ed*frame_to_time/100.0]
-                    tmp_dict["score"]= cls_anc[anc_idx][label]*1.0
-                    tmp_dict["label"]=dataset.label_name[label]
-                    tmp_dict["gentime"]= idx*frame_to_time/100.0
+                for cidx in range(0, len(cls)):
+                    label = cls[cidx]
+                    tmp_dict = {}
+                    tmp_dict["segment"] = [st * frame_to_time / 100.0, ed * frame_to_time / 100.0]
+                    tmp_dict["score"] = cls_anc[anc_idx][label] * 1.0
+                    tmp_dict["label"] = dataset.label_name[label]
+                    tmp_dict["gentime"] = idx * frame_to_time / 100.0
                     proposal_anc_dict.append(tmp_dict)
                 
-            proposal_dict+=proposal_anc_dict
+            proposal_dict += proposal_anc_dict
         
-        proposal_dict=non_max_suppression(proposal_dict, overlapThresh=opt['soft_nms'])
+        proposal_dict = non_max_suppression(proposal_dict, overlapThresh=opt['soft_nms'])
                     
-        result_dict[video_name]=proposal_dict
-        proposal_dict=[]
+        result_dict[video_name] = proposal_dict
+        proposal_dict = []
         
     return result_dict
-
 
 def eval_map_supnet(opt, dataset, output_cls, output_reg, labels_cls, labels_reg):
     model = SuppressNet(opt).cuda()
@@ -480,15 +496,14 @@ if __name__ == '__main__':
     opt = vars(opt)
     if not os.path.exists(opt["checkpoint_path"]):
         os.makedirs(opt["checkpoint_path"]) 
-    opt_file=open(opt["checkpoint_path"]+"/opts.json","w")
-    json.dump(opt,opt_file)
+    opt_file = open(opt["checkpoint_path"] + "/opts.json", "w")
+    json.dump(opt, opt_file)
     opt_file.close()
     
     if opt['seed'] >= 0:
         seed = opt['seed'] 
         torch.manual_seed(seed)
         np.random.seed(seed)
-        #random.seed(seed)
            
     opt['anchors'] = [int(item) for item in opt['anchors'].split(',')]  
            
