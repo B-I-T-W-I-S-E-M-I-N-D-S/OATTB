@@ -1,0 +1,2288 @@
+{
+    "database": {
+        "video_validation_0000690": {
+            "subset": "train",
+            "duration": 280.23333333333335,
+            "duration_frame": 8407,
+            "annotations": [
+                {
+                    "segment_frame": [
+                        171,
+                        318
+                    ],
+                    "segment": [
+                        5.7,
+                        10.6
+                    ],
+                    "labelIndex": 0,
+                    "label": "BaseballPitch"
+                },
+                {
+                    "segment_frame": [
+                        447,
+                        543
+                    ],
+                    "segment": [
+                        14.9,
+                        18.1
+                    ],
+                    "labelIndex": 0,
+                    "label": "BaseballPitch"
+                },
+                {
+                    "segment_frame": [
+                        1050,
+                        1140
+                    ],
+                    "segment": [
+                        35.0,
+                        38.0
+                    ],
+                    "labelIndex": 0,
+                    "label": "BaseballPitch"
+                },
+                {
+                    "segment_frame": [
+                        4704,
+                        4839
+                    ],
+                    "segment": [
+                        156.8,
+                        161.3
+                    ],
+                    "labelIndex": 0,
+                    "label": "BaseballPitch"
+                },
+                {
+                    "segment_frame": [
+                        7548,
+                        7686
+                    ],
+                    "segment": [
+                        251.6,
+                        256.2
+                    ],
+                    "labelIndex": 0,
+                    "label": "BaseballPitch"
+                }
+            ],
+            "fps": 30.0
+        },
+        "video_validation_0000288": {
+            "subset": "train",
+            "duration": 111.86666666666666,
+            "duration_frame": 3356,
+            "annotations": [
+                {
+                    "segment_frame": [
+                        2385,
+                        2520
+                    ],
+                    "segment": [
+                        79.5,
+                        84.0
+                    ],
+                    "labelIndex": 9,
+                    "label": "GolfSwing"
+                },
+                {
+                    "segment_frame": [
+                        3174,
+                        3276
+                    ],
+                    "segment": [
+                        105.8,
+                        109.2
+                    ],
+                    "labelIndex": 9,
+                    "label": "GolfSwing"
+                }
+            ],
+            "fps": 30.0
+        },
+        "video_validation_0000416": {
+            "subset": "train",
+            "duration": 541.2,
+            "duration_frame": 16236,
+            "annotations": [
+                {
+                    "segment_frame": [
+                        66,
+                        303
+                    ],
+                    "segment": [
+                        2.2,
+                        10.1
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                },
+                {
+                    "segment_frame": [
+                        597,
+                        735
+                    ],
+                    "segment": [
+                        19.9,
+                        24.5
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                },
+                {
+                    "segment_frame": [
+                        1653,
+                        1890
+                    ],
+                    "segment": [
+                        55.1,
+                        63.0
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                },
+                {
+                    "segment_frame": [
+                        2283,
+                        2475
+                    ],
+                    "segment": [
+                        76.1,
+                        82.5
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                },
+                {
+                    "segment_frame": [
+                        3675,
+                        3924
+                    ],
+                    "segment": [
+                        122.5,
+                        130.8
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                },
+                {
+                    "segment_frame": [
+                        4428,
+                        4644
+                    ],
+                    "segment": [
+                        147.6,
+                        154.8
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                },
+                {
+                    "segment_frame": [
+                        6018,
+                        6228
+                    ],
+                    "segment": [
+                        200.6,
+                        207.6
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                },
+                {
+                    "segment_frame": [
+                        8028,
+                        8181
+                    ],
+                    "segment": [
+                        267.6,
+                        272.7
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                },
+                {
+                    "segment_frame": [
+                        8451,
+                        8736
+                    ],
+                    "segment": [
+                        281.7,
+                        291.2
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                },
+                {
+                    "segment_frame": [
+                        10509,
+                        10725
+                    ],
+                    "segment": [
+                        350.3,
+                        357.5
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                },
+                {
+                    "segment_frame": [
+                        13971,
+                        14232
+                    ],
+                    "segment": [
+                        465.7,
+                        474.4
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                }
+            ],
+            "fps": 30.0
+        },
+        "video_validation_0000282": {
+            "subset": "train",
+            "duration": 38.4,
+            "duration_frame": 1152,
+            "annotations": [
+                {
+                    "segment_frame": [
+                        231,
+                        465
+                    ],
+                    "segment": [
+                        7.7,
+                        15.5
+                    ],
+                    "labelIndex": 9,
+                    "label": "GolfSwing"
+                },
+                {
+                    "segment_frame": [
+                        879,
+                        972
+                    ],
+                    "segment": [
+                        29.3,
+                        32.4
+                    ],
+                    "labelIndex": 9,
+                    "label": "GolfSwing"
+                },
+                {
+                    "segment_frame": [
+                        983,
+                        1074
+                    ],
+                    "segment": [
+                        32.8,
+                        35.8
+                    ],
+                    "labelIndex": 9,
+                    "label": "GolfSwing"
+                }
+            ],
+            "fps": 30.0
+        },
+        "video_validation_0000283": {
+            "subset": "train",
+            "duration": 61.666666666666664,
+            "duration_frame": 1850,
+            "annotations": [
+                {
+                    "segment_frame": [
+                        0,
+                        69
+                    ],
+                    "segment": [
+                        0.0,
+                        2.3
+                    ],
+                    "labelIndex": 9,
+                    "label": "GolfSwing"
+                },
+                {
+                    "segment_frame": [
+                        333,
+                        1839
+                    ],
+                    "segment": [
+                        11.1,
+                        61.3
+                    ],
+                    "labelIndex": 9,
+                    "label": "GolfSwing"
+                }
+            ],
+            "fps": 30.0
+        },
+        "video_validation_0000281": {
+            "subset": "train",
+            "duration": 227.76666666666668,
+            "duration_frame": 6833,
+            "annotations": [
+                {
+                    "segment_frame": [
+                        5091,
+                        5259
+                    ],
+                    "segment": [
+                        169.7,
+                        175.3
+                    ],
+                    "labelIndex": 9,
+                    "label": "GolfSwing"
+                },
+                {
+                    "segment_frame": [
+                        6648,
+                        6759
+                    ],
+                    "segment": [
+                        221.6,
+                        225.3
+                    ],
+                    "labelIndex": 9,
+                    "label": "GolfSwing"
+                }
+            ],
+            "fps": 30.0
+        },
+        "video_validation_0000286": {
+            "subset": "train",
+            "duration": 218.73333333333332,
+            "duration_frame": 6562,
+            "annotations": [
+                {
+                    "segment_frame": [
+                        5172,
+                        5358
+                    ],
+                    "segment": [
+                        172.4,
+                        178.6
+                    ],
+                    "labelIndex": 9,
+                    "label": "GolfSwing"
+                }
+            ],
+            "fps": 30.0
+        },
+        "video_validation_0000287": {
+            "subset": "train",
+            "duration": 129.06666666666666,
+            "duration_frame": 3872,
+            "annotations": [
+                {
+                    "segment_frame": [
+                        876,
+                        1005
+                    ],
+                    "segment": [
+                        29.2,
+                        33.5
+                    ],
+                    "labelIndex": 9,
+                    "label": "GolfSwing"
+                },
+                {
+                    "segment_frame": [
+                        1197,
+                        1347
+                    ],
+                    "segment": [
+                        39.9,
+                        44.9
+                    ],
+                    "labelIndex": 9,
+                    "label": "GolfSwing"
+                },
+                {
+                    "segment_frame": [
+                        1737,
+                        1914
+                    ],
+                    "segment": [
+                        57.9,
+                        63.8
+                    ],
+                    "labelIndex": 9,
+                    "label": "GolfSwing"
+                },
+                {
+                    "segment_frame": [
+                        2319,
+                        2661
+                    ],
+                    "segment": [
+                        77.3,
+                        88.7
+                    ],
+                    "labelIndex": 9,
+                    "label": "GolfSwing"
+                }
+            ],
+            "fps": 30.0
+        },
+        "video_validation_0000284": {
+            "subset": "train",
+            "duration": 67.93333333333334,
+            "duration_frame": 2038,
+            "annotations": [
+                {
+                    "segment_frame": [
+                        390,
+                        576
+                    ],
+                    "segment": [
+                        13.0,
+                        19.2
+                    ],
+                    "labelIndex": 9,
+                    "label": "GolfSwing"
+                },
+                {
+                    "segment_frame": [
+                        672,
+                        1281
+                    ],
+                    "segment": [
+                        22.4,
+                        42.7
+                    ],
+                    "labelIndex": 9,
+                    "label": "GolfSwing"
+                },
+                {
+                    "segment_frame": [
+                        1317,
+                        1410
+                    ],
+                    "segment": [
+                        43.9,
+                        47.0
+                    ],
+                    "labelIndex": 9,
+                    "label": "GolfSwing"
+                },
+                {
+                    "segment_frame": [
+                        1428,
+                        1524
+                    ],
+                    "segment": [
+                        47.6,
+                        50.8
+                    ],
+                    "labelIndex": 9,
+                    "label": "GolfSwing"
+                }
+            ],
+            "fps": 30.0
+        },
+        "video_validation_0000289": {
+            "subset": "train",
+            "duration": 131.4,
+            "duration_frame": 3942,
+            "annotations": [
+                {
+                    "segment_frame": [
+                        90,
+                        777
+                    ],
+                    "segment": [
+                        3.0,
+                        25.9
+                    ],
+                    "labelIndex": 9,
+                    "label": "GolfSwing"
+                },
+                {
+                    "segment_frame": [
+                        983,
+                        3699
+                    ],
+                    "segment": [
+                        32.8,
+                        123.3
+                    ],
+                    "labelIndex": 9,
+                    "label": "GolfSwing"
+                }
+            ],
+            "fps": 30.0
+        },
+        "video_test_0000292": {
+            "subset": "test",
+            "duration": 75.96666666666667,
+            "duration_frame": 2279,
+            "annotations": [
+                {
+                    "segment_frame": [
+                        1977,
+                        2022
+                    ],
+                    "segment": [
+                        65.9,
+                        67.4
+                    ],
+                    "labelIndex": 16,
+                    "label": "SoccerPenalty"
+                }
+            ],
+            "fps": 30.0
+        },
+        "video_test_0001078": {
+            "subset": "test",
+            "duration": 97.46666666666667,
+            "duration_frame": 2924,
+            "annotations": [
+                {
+                    "segment_frame": [
+                        15,
+                        66
+                    ],
+                    "segment": [
+                        0.5,
+                        2.2
+                    ],
+                    "labelIndex": 19,
+                    "label": "VolleyballSpiking"
+                },
+                {
+                    "segment_frame": [
+                        138,
+                        270
+                    ],
+                    "segment": [
+                        4.6,
+                        9.0
+                    ],
+                    "labelIndex": 19,
+                    "label": "VolleyballSpiking"
+                },
+                {
+                    "segment_frame": [
+                        459,
+                        510
+                    ],
+                    "segment": [
+                        15.3,
+                        17.0
+                    ],
+                    "labelIndex": 19,
+                    "label": "VolleyballSpiking"
+                },
+                {
+                    "segment_frame": [
+                        600,
+                        726
+                    ],
+                    "segment": [
+                        20.0,
+                        24.2
+                    ],
+                    "labelIndex": 19,
+                    "label": "VolleyballSpiking"
+                },
+                {
+                    "segment_frame": [
+                        894,
+                        1056
+                    ],
+                    "segment": [
+                        29.8,
+                        35.2
+                    ],
+                    "labelIndex": 19,
+                    "label": "VolleyballSpiking"
+                },
+                {
+                    "segment_frame": [
+                        1164,
+                        1233
+                    ],
+                    "segment": [
+                        38.8,
+                        41.1
+                    ],
+                    "labelIndex": 19,
+                    "label": "VolleyballSpiking"
+                },
+                {
+                    "segment_frame": [
+                        1374,
+                        1497
+                    ],
+                    "segment": [
+                        45.8,
+                        49.9
+                    ],
+                    "labelIndex": 19,
+                    "label": "VolleyballSpiking"
+                },
+                {
+                    "segment_frame": [
+                        1674,
+                        1737
+                    ],
+                    "segment": [
+                        55.8,
+                        57.9
+                    ],
+                    "labelIndex": 19,
+                    "label": "VolleyballSpiking"
+                },
+                {
+                    "segment_frame": [
+                        1836,
+                        1967
+                    ],
+                    "segment": [
+                        61.2,
+                        65.6
+                    ],
+                    "labelIndex": 19,
+                    "label": "VolleyballSpiking"
+                },
+                {
+                    "segment_frame": [
+                        2223,
+                        2541
+                    ],
+                    "segment": [
+                        74.1,
+                        84.7
+                    ],
+                    "labelIndex": 19,
+                    "label": "VolleyballSpiking"
+                }
+            ],
+            "fps": 30.0
+        },
+        "video_test_0000896": {
+            "subset": "test",
+            "duration": 226.66666666666666,
+            "duration_frame": 6800,
+            "annotations": [
+                {
+                    "segment_frame": [
+                        558,
+                        744
+                    ],
+                    "segment": [
+                        18.6,
+                        24.8
+                    ],
+                    "labelIndex": 11,
+                    "label": "HighJump"
+                },
+                {
+                    "segment_frame": [
+                        873,
+                        1044
+                    ],
+                    "segment": [
+                        29.1,
+                        34.8
+                    ],
+                    "labelIndex": 11,
+                    "label": "HighJump"
+                },
+                {
+                    "segment_frame": [
+                        1230,
+                        1422
+                    ],
+                    "segment": [
+                        41.0,
+                        47.4
+                    ],
+                    "labelIndex": 11,
+                    "label": "HighJump"
+                },
+                {
+                    "segment_frame": [
+                        1716,
+                        1920
+                    ],
+                    "segment": [
+                        57.2,
+                        64.0
+                    ],
+                    "labelIndex": 11,
+                    "label": "HighJump"
+                },
+                {
+                    "segment_frame": [
+                        2082,
+                        2361
+                    ],
+                    "segment": [
+                        69.4,
+                        78.7
+                    ],
+                    "labelIndex": 11,
+                    "label": "HighJump"
+                },
+                {
+                    "segment_frame": [
+                        2472,
+                        2658
+                    ],
+                    "segment": [
+                        82.4,
+                        88.6
+                    ],
+                    "labelIndex": 11,
+                    "label": "HighJump"
+                },
+                {
+                    "segment_frame": [
+                        2694,
+                        2844
+                    ],
+                    "segment": [
+                        89.8,
+                        94.8
+                    ],
+                    "labelIndex": 11,
+                    "label": "HighJump"
+                }
+            ],
+            "fps": 30.0
+        },
+        "video_test_0000897": {
+            "subset": "test",
+            "duration": 120.1,
+            "duration_frame": 3603,
+            "annotations": [
+                {
+                    "segment_frame": [
+                        312,
+                        402
+                    ],
+                    "segment": [
+                        10.4,
+                        13.4
+                    ],
+                    "labelIndex": 5,
+                    "label": "CricketBowling"
+                },
+                {
+                    "segment_frame": [
+                        528,
+                        636
+                    ],
+                    "segment": [
+                        17.6,
+                        21.2
+                    ],
+                    "labelIndex": 5,
+                    "label": "CricketBowling"
+                },
+                {
+                    "segment_frame": [
+                        998,
+                        1110
+                    ],
+                    "segment": [
+                        33.3,
+                        37.0
+                    ],
+                    "labelIndex": 5,
+                    "label": "CricketBowling"
+                },
+                {
+                    "segment_frame": [
+                        1584,
+                        1695
+                    ],
+                    "segment": [
+                        52.8,
+                        56.5
+                    ],
+                    "labelIndex": 5,
+                    "label": "CricketBowling"
+                },
+                {
+                    "segment_frame": [
+                        1950,
+                        2027
+                    ],
+                    "segment": [
+                        65.0,
+                        67.6
+                    ],
+                    "labelIndex": 5,
+                    "label": "CricketBowling"
+                },
+                {
+                    "segment_frame": [
+                        2658,
+                        2730
+                    ],
+                    "segment": [
+                        88.6,
+                        91.0
+                    ],
+                    "labelIndex": 5,
+                    "label": "CricketBowling"
+                },
+                {
+                    "segment_frame": [
+                        2928,
+                        3099
+                    ],
+                    "segment": [
+                        97.6,
+                        103.3
+                    ],
+                    "labelIndex": 5,
+                    "label": "CricketBowling"
+                },
+                {
+                    "segment_frame": [
+                        3102,
+                        3153
+                    ],
+                    "segment": [
+                        103.4,
+                        105.1
+                    ],
+                    "labelIndex": 5,
+                    "label": "CricketBowling"
+                },
+                {
+                    "segment_frame": [
+                        3156,
+                        3210
+                    ],
+                    "segment": [
+                        105.2,
+                        107.0
+                    ],
+                    "labelIndex": 5,
+                    "label": "CricketBowling"
+                }
+            ],
+            "fps": 30.0
+        },
+        "video_test_0000950": {
+            "subset": "test",
+            "duration": 1315.32,
+            "duration_frame": 32883,
+            "annotations": [
+                {
+                    "segment_frame": [
+                        290,
+                        520
+                    ],
+                    "segment": [
+                        11.6,
+                        20.8
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        1030,
+                        1185
+                    ],
+                    "segment": [
+                        41.2,
+                        47.4
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        2065,
+                        2277
+                    ],
+                    "segment": [
+                        82.6,
+                        91.1
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        2535,
+                        2830
+                    ],
+                    "segment": [
+                        101.4,
+                        113.2
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        3297,
+                        3502
+                    ],
+                    "segment": [
+                        131.9,
+                        140.1
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        3867,
+                        4087
+                    ],
+                    "segment": [
+                        154.7,
+                        163.5
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        5240,
+                        5470
+                    ],
+                    "segment": [
+                        209.6,
+                        218.8
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        6235,
+                        6517
+                    ],
+                    "segment": [
+                        249.4,
+                        260.7
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        6822,
+                        6992
+                    ],
+                    "segment": [
+                        272.9,
+                        279.7
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        7457,
+                        7640
+                    ],
+                    "segment": [
+                        298.3,
+                        305.6
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        8415,
+                        8565
+                    ],
+                    "segment": [
+                        336.6,
+                        342.6
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        8982,
+                        9242
+                    ],
+                    "segment": [
+                        359.3,
+                        369.7
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        9772,
+                        9907
+                    ],
+                    "segment": [
+                        390.9,
+                        396.3
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        10470,
+                        10640
+                    ],
+                    "segment": [
+                        418.8,
+                        425.6
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        11300,
+                        11415
+                    ],
+                    "segment": [
+                        452.0,
+                        456.6
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        11935,
+                        12255
+                    ],
+                    "segment": [
+                        477.4,
+                        490.2
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        12925,
+                        13077
+                    ],
+                    "segment": [
+                        517.0,
+                        523.1
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        13857,
+                        14050
+                    ],
+                    "segment": [
+                        554.3,
+                        562.0
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        14519,
+                        14775
+                    ],
+                    "segment": [
+                        580.8,
+                        591.0
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        15100,
+                        15300
+                    ],
+                    "segment": [
+                        604.0,
+                        612.0
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        15822,
+                        16080
+                    ],
+                    "segment": [
+                        632.9,
+                        643.2
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        16715,
+                        16895
+                    ],
+                    "segment": [
+                        668.6,
+                        675.8
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        17455,
+                        17712
+                    ],
+                    "segment": [
+                        698.2,
+                        708.5
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        18400,
+                        18555
+                    ],
+                    "segment": [
+                        736.0,
+                        742.2
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        19175,
+                        19447
+                    ],
+                    "segment": [
+                        767.0,
+                        777.9
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        19975,
+                        20100
+                    ],
+                    "segment": [
+                        799.0,
+                        804.0
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        20590,
+                        20792
+                    ],
+                    "segment": [
+                        823.6,
+                        831.7
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        22120,
+                        22205
+                    ],
+                    "segment": [
+                        884.8,
+                        888.2
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        22805,
+                        23072
+                    ],
+                    "segment": [
+                        912.2,
+                        922.9
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        23840,
+                        24005
+                    ],
+                    "segment": [
+                        953.6,
+                        960.2
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        24337,
+                        24590
+                    ],
+                    "segment": [
+                        973.5,
+                        983.6
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        24825,
+                        24965
+                    ],
+                    "segment": [
+                        993.0,
+                        998.6
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        25542,
+                        25705
+                    ],
+                    "segment": [
+                        1021.7,
+                        1028.2
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        26170,
+                        26370
+                    ],
+                    "segment": [
+                        1046.8,
+                        1054.8
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        27095,
+                        27292
+                    ],
+                    "segment": [
+                        1083.8,
+                        1091.7
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        27930,
+                        28200
+                    ],
+                    "segment": [
+                        1117.2,
+                        1128.0
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        29257,
+                        29542
+                    ],
+                    "segment": [
+                        1170.3,
+                        1181.7
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        30139,
+                        30402
+                    ],
+                    "segment": [
+                        1205.6,
+                        1216.1
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        31247,
+                        31360
+                    ],
+                    "segment": [
+                        1249.9,
+                        1254.4
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                },
+                {
+                    "segment_frame": [
+                        31914,
+                        32122
+                    ],
+                    "segment": [
+                        1276.6,
+                        1284.9
+                    ],
+                    "labelIndex": 10,
+                    "label": "HammerThrow"
+                }
+            ],
+            "fps": 25.0
+        },
+        "video_test_0001159": {
+            "subset": "test",
+            "duration": 603.6333333333333,
+            "duration_frame": 18109,
+            "annotations": [
+                {
+                    "segment_frame": [
+                        276,
+                        513
+                    ],
+                    "segment": [
+                        9.2,
+                        17.1
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                },
+                {
+                    "segment_frame": [
+                        972,
+                        1206
+                    ],
+                    "segment": [
+                        32.4,
+                        40.2
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                },
+                {
+                    "segment_frame": [
+                        3384,
+                        3549
+                    ],
+                    "segment": [
+                        112.8,
+                        118.3
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                },
+                {
+                    "segment_frame": [
+                        5529,
+                        5790
+                    ],
+                    "segment": [
+                        184.3,
+                        193.0
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                },
+                {
+                    "segment_frame": [
+                        6396,
+                        6618
+                    ],
+                    "segment": [
+                        213.2,
+                        220.6
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                },
+                {
+                    "segment_frame": [
+                        9384,
+                        9699
+                    ],
+                    "segment": [
+                        312.8,
+                        323.3
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                },
+                {
+                    "segment_frame": [
+                        10281,
+                        10569
+                    ],
+                    "segment": [
+                        342.7,
+                        352.3
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                },
+                {
+                    "segment_frame": [
+                        11445,
+                        11556
+                    ],
+                    "segment": [
+                        381.5,
+                        385.2
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                },
+                {
+                    "segment_frame": [
+                        12465,
+                        12681
+                    ],
+                    "segment": [
+                        415.5,
+                        422.7
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                },
+                {
+                    "segment_frame": [
+                        14226,
+                        14397
+                    ],
+                    "segment": [
+                        474.2,
+                        479.9
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                },
+                {
+                    "segment_frame": [
+                        14859,
+                        15018
+                    ],
+                    "segment": [
+                        495.3,
+                        500.6
+                    ],
+                    "labelIndex": 12,
+                    "label": "JavelinThrow"
+                }
+            ],
+            "fps": 30.0
+        },
+        "video_test_0001079": {
+            "subset": "test",
+            "duration": 490.8,
+            "duration_frame": 14724,
+            "annotations": [
+                {
+                    "segment_frame": [
+                        10593,
+                        10668
+                    ],
+                    "segment": [
+                        353.1,
+                        355.6
+                    ],
+                    "labelIndex": 13,
+                    "label": "LongJump"
+                },
+                {
+                    "segment_frame": [
+                        10518,
+                        10578
+                    ],
+                    "segment": [
+                        350.6,
+                        352.6
+                    ],
+                    "labelIndex": 13,
+                    "label": "LongJump"
+                },
+                {
+                    "segment_frame": [
+                        10686,
+                        11142
+                    ],
+                    "segment": [
+                        356.2,
+                        371.4
+                    ],
+                    "labelIndex": 13,
+                    "label": "LongJump"
+                },
+                {
+                    "segment_frame": [
+                        11178,
+                        11238
+                    ],
+                    "segment": [
+                        372.6,
+                        374.6
+                    ],
+                    "labelIndex": 13,
+                    "label": "LongJump"
+                },
+                {
+                    "segment_frame": [
+                        11463,
+                        11601
+                    ],
+                    "segment": [
+                        382.1,
+                        386.7
+                    ],
+                    "labelIndex": 13,
+                    "label": "LongJump"
+                },
+                {
+                    "segment_frame": [
+                        11823,
+                        11979
+                    ],
+                    "segment": [
+                        394.1,
+                        399.3
+                    ],
+                    "labelIndex": 13,
+                    "label": "LongJump"
+                },
+                {
+                    "segment_frame": [
+                        13785,
+                        13956
+                    ],
+                    "segment": [
+                        459.5,
+                        465.2
+                    ],
+                    "labelIndex": 13,
+                    "label": "LongJump"
+                },
+                {
+                    "segment_frame": [
+                        13959,
+                        14376
+                    ],
+                    "segment": [
+                        465.3,
+                        479.2
+                    ],
+                    "labelIndex": 13,
+                    "label": "LongJump"
+                }
+            ],
+            "fps": 30.0
+        },
+        "video_test_0000807": {
+            "subset": "test",
+            "duration": 159.26666666666668,
+            "duration_frame": 4778,
+            "annotations": [
+                {
+                    "segment_frame": [
+                        105,
+                        168
+                    ],
+                    "segment": [
+                        3.5,
+                        5.6
+                    ],
+                    "labelIndex": 7,
+                    "label": "Diving"
+                },
+                {
+                    "segment_frame": [
+                        267,
+                        348
+                    ],
+                    "segment": [
+                        8.9,
+                        11.6
+                    ],
+                    "labelIndex": 7,
+                    "label": "Diving"
+                },
+                {
+                    "segment_frame": [
+                        615,
+                        702
+                    ],
+                    "segment": [
+                        20.5,
+                        23.4
+                    ],
+                    "labelIndex": 7,
+                    "label": "Diving"
+                },
+                {
+                    "segment_frame": [
+                        993,
+                        1038
+                    ],
+                    "segment": [
+                        33.1,
+                        34.6
+                    ],
+                    "labelIndex": 7,
+                    "label": "Diving"
+                },
+                {
+                    "segment_frame": [
+                        1362,
+                        1428
+                    ],
+                    "segment": [
+                        45.4,
+                        47.6
+                    ],
+                    "labelIndex": 7,
+                    "label": "Diving"
+                },
+                {
+                    "segment_frame": [
+                        1614,
+                        1698
+                    ],
+                    "segment": [
+                        53.8,
+                        56.6
+                    ],
+                    "labelIndex": 7,
+                    "label": "Diving"
+                },
+                {
+                    "segment_frame": [
+                        1881,
+                        1965
+                    ],
+                    "segment": [
+                        62.7,
+                        65.5
+                    ],
+                    "labelIndex": 7,
+                    "label": "Diving"
+                },
+                {
+                    "segment_frame": [
+                        2127,
+                        2166
+                    ],
+                    "segment": [
+                        70.9,
+                        72.2
+                    ],
+                    "labelIndex": 7,
+                    "label": "Diving"
+                },
+                {
+                    "segment_frame": [
+                        3123,
+                        3189
+                    ],
+                    "segment": [
+                        104.1,
+                        106.3
+                    ],
+                    "labelIndex": 7,
+                    "label": "Diving"
+                },
+                {
+                    "segment_frame": [
+                        3333,
+                        3387
+                    ],
+                    "segment": [
+                        111.1,
+                        112.9
+                    ],
+                    "labelIndex": 7,
+                    "label": "Diving"
+                },
+                {
+                    "segment_frame": [
+                        3909,
+                        3993
+                    ],
+                    "segment": [
+                        130.3,
+                        133.1
+                    ],
+                    "labelIndex": 7,
+                    "label": "Diving"
+                },
+                {
+                    "segment_frame": [
+                        4167,
+                        4239
+                    ],
+                    "segment": [
+                        138.9,
+                        141.3
+                    ],
+                    "labelIndex": 7,
+                    "label": "Diving"
+                },
+                {
+                    "segment_frame": [
+                        4641,
+                        4692
+                    ],
+                    "segment": [
+                        154.7,
+                        156.4
+                    ],
+                    "labelIndex": 7,
+                    "label": "Diving"
+                },
+                {
+                    "segment_frame": [
+                        3516,
+                        3570
+                    ],
+                    "segment": [
+                        117.2,
+                        119.0
+                    ],
+                    "labelIndex": 7,
+                    "label": "Diving"
+                },
+                {
+                    "segment_frame": [
+                        4557,
+                        4602
+                    ],
+                    "segment": [
+                        151.9,
+                        153.4
+                    ],
+                    "labelIndex": 7,
+                    "label": "Diving"
+                }
+            ],
+            "fps": 30.0
+        },
+        "video_test_0000179": {
+            "subset": "test",
+            "duration": 168.53333333333333,
+            "duration_frame": 5056,
+            "annotations": [
+                {
+                    "segment_frame": [
+                        234,
+                        270
+                    ],
+                    "segment": [
+                        7.8,
+                        9.0
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        315,
+                        369
+                    ],
+                    "segment": [
+                        10.5,
+                        12.3
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        519,
+                        561
+                    ],
+                    "segment": [
+                        17.3,
+                        18.7
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        606,
+                        687
+                    ],
+                    "segment": [
+                        20.2,
+                        22.9
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        753,
+                        894
+                    ],
+                    "segment": [
+                        25.1,
+                        29.8
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        1023,
+                        1059
+                    ],
+                    "segment": [
+                        34.1,
+                        35.3
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        1086,
+                        1119
+                    ],
+                    "segment": [
+                        36.2,
+                        37.3
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        1359,
+                        1395
+                    ],
+                    "segment": [
+                        45.3,
+                        46.5
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        1431,
+                        1509
+                    ],
+                    "segment": [
+                        47.7,
+                        50.3
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        1533,
+                        1584
+                    ],
+                    "segment": [
+                        51.1,
+                        52.8
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        1722,
+                        1761
+                    ],
+                    "segment": [
+                        57.4,
+                        58.7
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        1821,
+                        1965
+                    ],
+                    "segment": [
+                        60.7,
+                        65.5
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        2118,
+                        2166
+                    ],
+                    "segment": [
+                        70.6,
+                        72.2
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        2289,
+                        2322
+                    ],
+                    "segment": [
+                        76.3,
+                        77.4
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        2400,
+                        2439
+                    ],
+                    "segment": [
+                        80.0,
+                        81.3
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        2682,
+                        2709
+                    ],
+                    "segment": [
+                        89.4,
+                        90.3
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        2802,
+                        2835
+                    ],
+                    "segment": [
+                        93.4,
+                        94.5
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        2895,
+                        2925
+                    ],
+                    "segment": [
+                        96.5,
+                        97.5
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        3048,
+                        3093
+                    ],
+                    "segment": [
+                        101.6,
+                        103.1
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        3129,
+                        3168
+                    ],
+                    "segment": [
+                        104.3,
+                        105.6
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        3222,
+                        3324
+                    ],
+                    "segment": [
+                        107.4,
+                        110.8
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        3612,
+                        3648
+                    ],
+                    "segment": [
+                        120.4,
+                        121.6
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        3729,
+                        3840
+                    ],
+                    "segment": [
+                        124.3,
+                        128.0
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        3969,
+                        4065
+                    ],
+                    "segment": [
+                        132.3,
+                        135.5
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        4230,
+                        4266
+                    ],
+                    "segment": [
+                        141.0,
+                        142.2
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        4350,
+                        4404
+                    ],
+                    "segment": [
+                        145.0,
+                        146.8
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        4491,
+                        4539
+                    ],
+                    "segment": [
+                        149.7,
+                        151.3
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                },
+                {
+                    "segment_frame": [
+                        4614,
+                        4656
+                    ],
+                    "segment": [
+                        153.8,
+                        155.2
+                    ],
+                    "labelIndex": 1,
+                    "label": "BasketballDunk"
+                }
+            ],
+            "fps": 30.0
+        },
+        "video_test_0000173": {
+            "subset": "test",
+            "duration": 191.53333333333333,
+            "duration_frame": 5746,
+            "annotations": [
+                {
+                    "segment_frame": [
+                        2841,
+                        2940
+                    ],
+                    "segment": [
+                        94.7,
+                        98.0
+                    ],
+                    "labelIndex": 4,
+                    "label": "CliffDiving"
+                },
+                {
+                    "segment_frame": [
+                        2967,
+                        3069
+                    ],
+                    "segment": [
+                        98.9,
+                        102.3
+                    ],
+                    "labelIndex": 4,
+                    "label": "CliffDiving"
+                },
+                {
+                    "segment_frame": [
+                        3540,
+                        3645
+                    ],
+                    "segment": [
+                        118.0,
+                        121.5
+                    ],
+                    "labelIndex": 4,
+                    "label": "CliffDiving"
+                },
+                {
+                    "segment_frame": [
+                        3939,
+                        4047
+                    ],
+                    "segment": [
+                        131.3,
+                        134.9
+                    ],
+                    "labelIndex": 4,
+                    "label": "CliffDiving"
+                },
+                {
+                    "segment_frame": [
+                        4077,
+                        4176
+                    ],
+                    "segment": [
+                        135.9,
+                        139.2
+                    ],
+                    "labelIndex": 4,
+                    "label": "CliffDiving"
+                },
+                {
+                    "segment_frame": [
+                        5358,
+                        5493
+                    ],
+                    "segment": [
+                        178.6,
+                        183.1
+                    ],
+                    "labelIndex": 4,
+                    "label": "CliffDiving"
+                },
+                {
+                    "segment_frame": [
+                        2841,
+                        2940
+                    ],
+                    "segment": [
+                        94.7,
+                        98.0
+                    ],
+                    "labelIndex": 7,
+                    "label": "Diving"
+                },
+                {
+                    "segment_frame": [
+                        2967,
+                        3069
+                    ],
+                    "segment": [
+                        98.9,
+                        102.3
+                    ],
+                    "labelIndex": 7,
+                    "label": "Diving"
+                },
+                {
+                    "segment_frame": [
+                        3540,
+                        3645
+                    ],
+                    "segment": [
+                        118.0,
+                        121.5
+                    ],
+                    "labelIndex": 7,
+                    "label": "Diving"
+                },
+                {
+                    "segment_frame": [
+                        3939,
+                        4047
+                    ],
+                    "segment": [
+                        131.3,
+                        134.9
+                    ],
+                    "labelIndex": 7,
+                    "label": "Diving"
+                },
+                {
+                    "segment_frame": [
+                        4077,
+                        4176
+                    ],
+                    "segment": [
+                        135.9,
+                        139.2
+                    ],
+                    "labelIndex": 7,
+                    "label": "Diving"
+                },
+                {
+                    "segment_frame": [
+                        5358,
+                        5493
+                    ],
+                    "segment": [
+                        178.6,
+                        183.1
+                    ],
+                    "labelIndex": 7,
+                    "label": "Diving"
+                }
+            ],
+            "fps": 30.0
+        }
+    }
+}
