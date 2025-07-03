@@ -63,7 +63,7 @@ def train_one_epoch(opt, model, train_dataset, optimizer, warmup=False):
             for g in optimizer.param_groups:
                 g['lr'] = n_iter * (opt['lr']) / total_iter
         
-        act_cls, act_reg, snip_cls = model(input_data.float().cuda())
+        act_cls, act_reg = model(input_data.cuda())
         
         cost_reg = 0
         cost_cls = 0
@@ -156,7 +156,7 @@ def eval_frame(opt, model, dataset):
     epoch_cost_reg = 0   
     
     for n_iter, (input_data, cls_label, reg_label) in enumerate(test_loader):
-        act_cls, act_reg, _ = model(input_data.cuda())
+        act_cls, act_reg = model(input_data.cuda())
         
         cost_reg = 0
         cost_cls = 0
