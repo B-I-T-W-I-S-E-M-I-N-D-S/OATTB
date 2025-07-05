@@ -6,6 +6,7 @@ import torch.nn.parallel
 import torch.nn.functional as F
 import torch.optim as optim
 import numpy as np
+from tqdm import tqdm
 import opts_thumos as opts
 import time
 import h5py
@@ -58,7 +59,7 @@ def train_one_epoch(opt, model, train_dataset, optimizer, warmup=False):
     
     total_iter = len(train_dataset) // opt['batch_size']
     
-    for n_iter, (input_data, cls_label, reg_label) in enumerate(train_loader):
+    for n_iter, (input_data, cls_label, reg_label) in enumerate(tqdm(train_loader)):
         if warmup:
             for g in optimizer.param_groups:
                 g['lr'] = n_iter * (opt['lr']) / total_iter
@@ -155,7 +156,8 @@ def eval_frame(opt, model, dataset):
     epoch_cost_cls = 0
     epoch_cost_reg = 0   
     
-    for n_iter, (input_data, cls_label, reg_label) in enumerate(test_loader):
+    for n_iter, (input_data, cls_label, reg_label) in enumerate(tqdm(test_loader)):
+
         act_cls, act_reg, _ = model(input_data.cuda())
         
         cost_reg = 0
