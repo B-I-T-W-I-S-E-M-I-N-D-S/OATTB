@@ -2,20 +2,19 @@ import os
 import json
 import torch
 import torchvision
-import torch.nn.parallel
 import torch.nn.functional as F
-import torch.optim as optim
 import numpy as np
 import opts_thumos as opts
-from tqdm import tqdm
 import time
 import h5py
+from tqdm import tqdm
 from iou_utils import *
 from eval import evaluation_detection
-from tensorboardX import SummaryWriter
 from dataset import VideoDataSet, calc_iou
 from models import MYNET, SuppressNet
 from loss_func import cls_loss_func, regress_loss_func
+from loss_func import MultiCrossEntropyLoss
+from functools import *
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import cv2
@@ -158,7 +157,7 @@ VIDEO_PLAYER_HTML = """
             <source src="{stream_url}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-        <div class="controls">
+        <div classzas="controls">
             <button onclick="seek(-10)">Rewind 10s</button>
             <button onclick="seek(10)">Forward 10s</button>
         </div>
@@ -173,20 +172,6 @@ VIDEO_PLAYER_HTML = """
 </html>
 """
 
-# Helper function to convert non-serializable types to JSON-serializable types
-def convert_to_serializable(obj):
-    if isinstance(obj, np.floating):  # Handles float32, float64, etc.
-        return float(obj)
-    elif isinstance(obj, np.integer):  # Handles int32, int64, etc.
-        return int(obj)
-    elif isinstance(obj, np.ndarray):  # Handles NumPy arrays
-        return obj.tolist()
-    elif isinstance(obj, list):  # Recursively process lists
-        return [convert_to_serializable(item) for item in obj]
-    elif isinstance(obj, dict):  # Recursively process dictionaries
-        return {key: convert_to_serializable(value) for key, value in obj.items()}
-    return obj
-
 # Action Detection Model Class
 class ActionDetectionModel:
     def __init__(self, opt):
@@ -195,7 +180,6 @@ class ActionDetectionModel:
         self.suppress_model = None
         self.task_status = {}
         self.base_url = None  # Will be set to ngrok public URL
-        self.best_map = 0.0
 
     def set_base_url(self, base_url: str):
         """Set the base URL for streaming endpoints"""
@@ -204,20 +188,19 @@ class ActionDetectionModel:
     def load_model(self):
         """Loads the MYNET and SuppressNet models"""
         self.model = MYNET(self.opt).to(device)
-        checkpoint_path = os.path.join(self.opt["checkpoint_path"], f"ckp_best.pth.tar")
-        if os.path.exists(checkpoint_path):
-            checkpoint = torch.load(checkpoint_path, map_location=device)
-            self.model.load_state_dict(checkpoint['state_dict'])
-            self.best_map = checkpoint.get('best_map', 0.0)
+        checkpoint_path = os.path.join(self.opt["checkpoint_path"], f"{self.opt['exp']}ckp_best.pth.tar")
+        checkpoint = torch.load(checkpoint_path, map_location=device)
+        base_dict = checkpoint['state_dict']
+        self.model.load_state_dict(base_dict)
         self.model.eval()
 
         if self.opt["pptype"] == "net":
             self.suppress_model = SuppressNet(self.opt).to(device)
             suppress_checkpoint_path = os.path.join(self.opt["checkpoint_path"], "ckp_best_suppress.pth.tar")
-            if os.path.exists(suppress_checkpoint_path):
-                suppress_checkpoint = torch.load(suppress_checkpoint_path, map_location=device)
-                self.suppress_model.load_state_dict(suppress_checkpoint['state_dict'])
-                self.suppress_model.eval()
+            suppress_checkpoint = torch.load(suppress_checkpoint_path, map_location=device)
+            suppress_base_dict = suppress_checkpoint['state_dict']
+            self.suppress_model.load_state_dict(suppress_base_dict)
+            self.suppress_model.eval()
 
     def annotate_video_with_actions(
         self,
@@ -251,7 +234,7 @@ class ActionDetectionModel:
             footer_height = VIS_CONFIG['video_footer_height']
             output_height = frame_height + footer_height
             output_path = os.path.join(save_dir, f"annotated_{video_id}_{self.opt['exp']}.mp4")
-            fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+            fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Use mp4v for MP4 output
             out = cv2.VideoWriter(output_path, fourcc, fps, (frame_width, output_height))
 
             if not out.isOpened():
@@ -797,7 +780,9 @@ class ActionDetectionModel:
             raise HTTPException(status_code=400, detail="Model is not loaded")
         input_data = input_data.dict()
         video_path = input_data['video_path']
+        print(video_path)
         video_name = input_data['video_name'] or os.path.splitext(os.path.basename(video_path))[0]
+        print(video_name)
 
         if not os.path.exists(video_path):
             raise HTTPException(status_code=400, detail=f"Video path {video_path} does not exist")
@@ -930,9 +915,10 @@ class ActionDetectionModel:
         headers = {
             "Accept-Ranges": "bytes",
             "Content-Disposition": f'inline; filename="{file_name}"',
-            "Cache-Control": "public, max-age=3600"
+            "Cache-Control": "public, max-age=3600"  # Cache for 1 hour
         }
 
+        # Handle range requests
         start = 0
         end = file_size - 1
         status_code = 200
@@ -950,13 +936,13 @@ class ActionDetectionModel:
                     )
                 headers["Content-Range"] = f"bytes {start}-{end}/{file_size}"
                 headers["Content-Length"] = str(end - start + 1)
-                status_code = 206
+                status_code = 206  # Partial Content
 
         def iterfile():
             with open(file_path, mode="rb") as file_like:
                 file_like.seek(start)
                 remaining = end - start + 1
-                chunk_size = 1024 * 1024
+                chunk_size = 1024 * 1024  # 1MB chunks
                 while remaining > 0:
                     chunk = file_like.read(min(chunk_size, remaining))
                     if not chunk:
@@ -970,238 +956,6 @@ class ActionDetectionModel:
             headers=headers,
             status_code=status_code
         ), headers
-
-    def train_one_epoch(self, train_dataset, optimizer, warmup=False):
-        train_loader = torch.utils.data.DataLoader(train_dataset,
-                                                  batch_size=self.opt['batch_size'], shuffle=True,
-                                                  num_workers=0, pin_memory=True, drop_last=False)
-        epoch_cost = 0
-        epoch_cost_cls = 0
-        epoch_cost_reg = 0
-        total_iter = len(train_dataset) // self.opt['batch_size']
-
-        for n_iter, (input_data, cls_label, reg_label) in enumerate(tqdm(train_loader)):
-            if warmup:
-                for g in optimizer.param_groups:
-                    g['lr'] = n_iter * (self.opt['lr']) / total_iter
-
-            input_data = input_data.to(device)
-            cls_label = cls_label.to(device)
-            reg_label = reg_label.to(device)
-            act_cls, act_reg = self.model(input_data.float())
-
-            cost_reg = 0
-            cost_cls = 0
-
-            loss = cls_loss_func(cls_label, act_cls)
-            cost_cls = loss
-            epoch_cost_cls += cost_cls.detach().cpu().numpy()
-
-            loss = regress_loss_func(reg_label, act_reg)
-            cost_reg = loss
-            epoch_cost_reg += cost_reg.detach().cpu().numpy()
-
-            cost = self.opt['alpha'] * cost_cls + self.opt['beta'] * cost_reg
-            epoch_cost += cost.detach().cpu().numpy()
-
-            optimizer.zero_grad()
-            cost.backward()
-            optimizer.step()
-
-        return n_iter, epoch_cost, epoch_cost_cls, epoch_cost_reg
-
-    def eval_one_epoch(self, test_dataset):
-        cls_loss, reg_loss, tot_loss, output_cls, output_reg, labels_cls, labels_reg, working_time, total_frames = self.eval_frame(test_dataset)
-        
-        result_dict = self.eval_map_nms(test_dataset, output_cls, output_reg) if self.opt["pptype"] == "nms" else self.eval_map_supnet(test_dataset, output_cls, output_reg)
-        output_dict = {"version": "VERSION 1.3", "results": result_dict, "external_data": {}}
-        
-        output_dict = convert_to_serializable(output_dict)
-        
-        with open(self.opt["result_file"], "w") as outfile:
-            json.dump(output_dict, outfile, indent=2)
-        
-        IoUmAP = evaluation_detection(self.opt, verbose=False)
-        IoUmAP_5 = sum(IoUmAP[0:]) / len(IoUmAP[0:]) if isinstance(IoUmAP, (list, np.ndarray)) else IoUmAP
-        return cls_loss, reg_loss, tot_loss, IoUmAP_5
-
-    def train(self):
-        writer = SummaryWriter()
-        self.model = MYNET(self.opt).to(device)
-        optimizer = optim.Adam(self.model.parameters(), lr=self.opt["lr"], weight_decay=self.opt["weight_decay"])
-        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=self.opt["lr_step"])
-
-        train_dataset = VideoDataSet(self.opt, subset="train")
-        test_dataset = VideoDataSet(self.opt, subset=self.opt['inference_subset'])
-
-        warmup = False
-
-        for n_epoch in range(self.opt['epoch']):
-            if n_epoch >= 1:
-                warmup = False
-
-            self.model.train()
-            n_iter, epoch_cost, epoch_cost_cls, epoch_cost_reg = self.train_one_epoch(train_dataset, optimizer, warmup)
-
-            writer.add_scalars('data/cost', {'train': epoch_cost / (n_iter + 1)}, n_epoch)
-            print("training loss(epoch %d): %.03f, cls - %f, reg - %f, lr - %f" % (
-                n_epoch,
-                epoch_cost / (n_iter + 1),
-                epoch_cost_cls / (n_iter + 1),
-                epoch_cost_reg / (n_iter + 1),
-                optimizer.param_groups[0]["lr"]
-            ))
-
-            scheduler.step()
-            self.model.eval()
-
-            cls_loss, reg_loss, tot_loss, IoUmAP_5 = self.eval_one_epoch(test_dataset)
-
-            writer.add_scalars('data/mAP', {'test': IoUmAP_5}, n_epoch)
-            print("testing loss(epoch %d): %.03f, cls - %f, reg - %f, mAP Avg - %f" % (
-                n_epoch, tot_loss, cls_loss, reg_loss, IoUmAP_5
-            ))
-
-            state = {'epoch': n_epoch + 1, 'state_dict': self.model.state_dict(), 'best_map': IoUmAP_5}
-            torch.save(state, os.path.join(self.opt["checkpoint_path"], "checkpoint.pth.tar"))
-            if IoUmAP_5 > self.best_map:
-                self.best_map = IoUmAP_5
-                torch.save(state, os.path.join(self.opt["checkpoint_path"], "ckp_best.pth.tar"))
-
-        writer.close()
-        return self.best_map
-
-    def test_frame(self):
-        self.model = MYNET(self.opt).to(device)
-        checkpoint = torch.load(os.path.join(self.opt["checkpoint_path"], "ckp_best.pth.tar"), map_location=device)
-        self.model.load_state_dict(checkpoint['state_dict'])
-        self.model.eval()
-
-        dataset = VideoDataSet(self.opt, subset=self.opt['inference_subset'])
-        outfile = h5py.File(self.opt['frame_result_file'], 'w')
-
-        cls_loss, reg_loss, tot_loss, output_cls, output_reg, labels_cls, labels_reg, working_time, total_frames = self.eval_frame(dataset)
-
-        print("testing loss: %f, cls_loss: %f, reg_loss: %f" % (tot_loss, cls_loss, reg_loss))
-
-        for video_name in dataset.video_list:
-            o_cls = output_cls[video_name]
-            o_reg = output_reg[video_name]
-            l_cls = labels_cls[video_name]
-            l_reg = labels_reg[video_name]
-
-            dset_predcls = outfile.create_dataset(video_name + '/pred_cls', o_cls.shape, maxshape=o_cls.shape, chunks=True, dtype=np.float32)
-            dset_predcls[:, :] = o_cls[:, :]
-            dset_predreg = outfile.create_dataset(video_name + '/pred_reg', o_reg.shape, maxshape=o_reg.shape, chunks=True, dtype=np.float32)
-            dset_predreg[:, :] = o_reg[:, :]
-            dset_labelcls = outfile.create_dataset(video_name + '/label_cls', l_cls.shape, maxshape=l_cls.shape, chunks=True, dtype=np.float32)
-            dset_labelcls[:, :] = l_cls[:, :]
-            dset_labelreg = outfile.create_dataset(video_name + '/label_reg', l_reg.shape, maxshape=l_reg.shape, chunks=True, dtype=np.float32)
-            dset_labelreg[:, :] = l_reg[:, :]
-        outfile.close()
-
-        print("working time : {}s, {}fps, {} frames".format(working_time, total_frames/working_time, total_frames))
-
-    def test(self):
-        self.load_model()
-        dataset = VideoDataSet(self.opt, subset=self.opt['inference_subset'])
-        cls_loss, reg_loss, tot_loss, output_cls, output_reg, labels_cls, labels_reg, working_time, total_frames = self.eval_frame(dataset)
-
-        if self.opt["pptype"] == "nms":
-            result_dict = self.eval_map_nms(dataset, output_cls, output_reg)
-        elif self.opt["pptype"] == "net":
-            result_dict = self.eval_map_supnet(dataset, output_cls, output_reg)
-        output_dict = {"version": "VERSION 1.3", "results": result_dict, "external_data": {}}
-        with open(self.opt["result_file"], "w") as outfile:
-            json.dump(convert_to_serializable(output_dict), outfile, indent=2)
-
-        evaluation_detection(self.opt)
-
-    def test_online(self):
-        self.load_model()
-        dataset = VideoDataSet(self.opt, subset=self.opt['inference_subset'])
-        test_loader = torch.utils.data.DataLoader(dataset,
-                                                  batch_size=1, shuffle=False,
-                                                  num_workers=0, pin_memory=True, drop_last=False)
-
-        result_dict = {}
-        proposal_dict = []
-
-        num_class = self.opt["num_of_class"]
-        unit_size = self.opt['segment_size']
-        threshold = self.opt['threshold']
-        anchors = self.opt['anchors']
-
-        start_time = time.time()
-        total_frames = 0
-
-        for video_name in dataset.video_list:
-            input_queue = torch.zeros((unit_size, self.opt['feat_dim']))
-            sup_queue = torch.zeros((unit_size, num_class - 1))
-
-            duration = dataset.video_len[video_name]
-            video_time = float(dataset.video_dict[video_name]["duration"])
-            frame_to_time = 100.0 * video_time / duration
-
-            for idx in range(0, duration):
-                total_frames += 1
-                input_queue[:-1, :] = input_queue[1:, :].clone()
-                input_queue[-1, :] = dataset._get_base_data(video_name, idx, idx + 1)
-
-                minput = input_queue.unsqueeze(0).to(device)
-                act_cls, act_reg = self.model(minput)
-                act_cls = torch.softmax(act_cls, dim=-1)
-
-                cls_anc = act_cls.squeeze(0).detach().cpu().numpy()
-                reg_anc = act_reg.squeeze(0).detach().cpu().numpy()
-
-                proposal_anc_dict = []
-                for anc_idx in range(0, len(anchors)):
-                    cls = np.argwhere(cls_anc[anc_idx][:-1] > self.opt['threshold']).reshape(-1)
-                    if len(cls) == 0:
-                        continue
-                    ed = idx + anchors[anc_idx] * reg_anc[anc_idx][0]
-                    length = anchors[anc_idx] * np.exp(reg_anc[anc_idx][1])
-                    st = ed - length
-                    for cidx in range(0, len(cls)):
-                        label = cls[cidx]
-                        tmp_dict = {}
-                        tmp_dict["segment"] = [float(st * frame_to_time / 100.0), float(ed * frame_to_time / 100.0)]
-                        tmp_dict["score"] = float(cls_anc[anc_idx][label])
-                        tmp_dict["label"] = dataset.label_name[label]
-                        tmp_dict["gentime"] = float(idx * frame_to_time / 100.0)
-                        proposal_anc_dict.append(tmp_dict)
-
-                proposal_anc_dict = non_max_suppression(proposal_anc_dict, overlapThresh=self.opt['soft_nms'])
-                sup_queue[:-1, :] = sup_queue[1:, :].clone()
-                sup_queue[-1, :] = 0
-                for proposal in proposal_anc_dict:
-                    cls_idx = dataset.label_name.index(proposal['label'])
-                    sup_queue[-1, cls_idx] = proposal["score"]
-
-                minput = sup_queue.unsqueeze(0).to(device)
-                suppress_conf = self.suppress_model(minput)
-                suppress_conf = suppress_conf.squeeze(0).detach().cpu().numpy()
-
-                for cls in range(0, num_class - 1):
-                    if suppress_conf[cls] > self.opt['sup_threshold']:
-                        for proposal in proposal_anc_dict:
-                            if proposal['label'] == dataset.label_name[cls]:
-                                if check_overlap_proposal(proposal_dict, proposal, overlapThresh=self.opt['soft_nms']) is None:
-                                    proposal_dict.append(proposal)
-
-            result_dict[video_name] = proposal_dict
-            proposal_dict = []
-
-        end_time = time.time()
-        working_time = end_time - start_time
-        print("working time : {}s, {}fps, {} frames".format(working_time, total_frames/working_time, total_frames))
-
-        output_dict = {"version": "VERSION 1.3", "results": result_dict, "external_data": {}}
-        with open(self.opt["result_file"], "w") as outfile:
-            json.dump(convert_to_serializable(output_dict), outfile, indent=2)
-
-        evaluation_detection(self.opt)
 
 # Initialize FastAPI app
 app = FastAPI(title="Action Detection API")
@@ -1243,6 +997,30 @@ async def predict(prediction: VideoPrediction = Depends(action_model.predict)):
         "video_path": "/path/to/video.mp4",
         "video_name": "example_video"
     }
+
+    Example response:
+    {
+        "video_name": "example_video",
+        "pred_segments": [
+            {"label": "action1", "start": 0.0, "end": 5.0, "duration": 5.0, "score": 0.95},
+            ...
+        ],
+        "gt_segments": [
+            {"label": "action1", "start": 0.1, "end": 5.2, "duration": 5.1},
+            ...
+        ],
+        "summary": {
+            "total_predictions": 10,
+            "total_ground_truth": 8,
+            "matched_segments": 7,
+            "avg_duration_diff": 0.15,
+            "avg_iou": 0.85
+        },
+        "mAP": 0.75,
+        "visualization_path": null,
+        "video_output_path": null,
+        "video_task_id": "550e8400-e29b-41d4-a716-446655440000"
+    }
     """
     return prediction
 
@@ -1250,6 +1028,15 @@ async def predict(prediction: VideoPrediction = Depends(action_model.predict)):
 async def task_status(task_status: TaskStatus = Depends(action_model.get_task_status)):
     """
     Check the status of a background visualization task.
+
+    Example response:
+    {
+        "visualization_path": "output/visualizations/viz_example_video_exp.png",
+        "video_output_path": "output/videos/annotated_example_video_exp.mp4",
+        "visualization_stream_url": "https://<ngrok-id>.ngrok.io/stream/visualizations/viz_example_video_exp.png",
+        "video_stream_url": "https://<ngrok-id>.ngrok.io/stream/videos/annotated_example_video_exp.mp4",
+        "status": "completed"
+    }
     """
     return task_status
 
@@ -1257,6 +1044,10 @@ async def task_status(task_status: TaskStatus = Depends(action_model.get_task_st
 async def stream_file(file_type: str, file_name: str, request: Request):
     """
     Stream a video or visualization file with range-based streaming support.
+    
+    Example:
+        GET /stream/videos/annotated_example_video_exp.mp4
+        Headers: Range: bytes=0-1048576
     """
     response, headers = action_model.stream_file(file_type, file_name, request.headers.get("Range"))
     return response
@@ -1265,6 +1056,9 @@ async def stream_file(file_type: str, file_name: str, request: Request):
 async def watch_video(video_name: str):
     """
     Serve an HTML page with a video player for the annotated video.
+    
+    Example:
+        GET /watch/example_video
     """
     file_name = f"annotated_{video_name}_{action_model.opt['exp']}.mp4"
     file_path = os.path.join("output", "videos", file_name)
@@ -1291,42 +1085,13 @@ async def download_file(file_type: str, file_name: str):
 async def startup():
     action_model.load_model()
     print("Action detection model loaded successfully")
-    port = 8004
+    # Set the base URL for streaming
+    port = 8012
     ngrok_tunnel = ngrok.connect(port)
     action_model.set_base_url(ngrok_tunnel.public_url)
     print('Public URL:', ngrok_tunnel.public_url)
 
-def main(opt):
-    max_perf = 0
-    if opt['mode'] == 'train':
-        max_perf = action_model.train()
-    elif opt['mode'] == 'test':
-        action_model.test()
-    elif opt['mode'] == 'test_frame':
-        action_model.test_frame()
-    elif opt['mode'] == 'test_online':
-        action_model.test_online()
-    elif opt['mode'] == 'eval':
-        evaluation_detection(opt)
-    return max_perf
-
 if __name__ == '__main__':
-    opt = vars(opts.parse_opt())
-    os.makedirs(opt["checkpoint_path"], exist_ok=True)
-    opt_file = open(os.path.join(opt["checkpoint_path"], f"{opt['exp']}_opts.json"), "w")
-    json.dump(opt, opt_file)
-    opt_file.close()
-
-    if opt['seed'] >= 0:
-        seed = opt['seed']
-        torch.manual_seed(seed)
-        np.random.seed(seed)
-
-    opt['anchors'] = [int(item) for item in opt['anchors'].split(',')]
-
-    if opt['mode'] == 'api':
-        port = 8004
-        nest_asyncio.apply()
-        uvicorn.run(app, port=port)
-    else:
-        main(opt)
+    port = 8012
+    nest_asyncio.apply()
+    uvicorn.run(app, port=port)

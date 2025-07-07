@@ -40,7 +40,7 @@ def box_include(y, target): #is target is the larger box than y?
                        
         
 class VideoDataSet(data.Dataset):
-    def __init__(self,opt,subset="train"):
+    def __init__(self, opt, subset="train", video_name=None):
         self.subset = subset
         self.mode = opt["mode"]
         self.predefined_fps = opt["predefined_fps"]
@@ -60,6 +60,7 @@ class VideoDataSet(data.Dataset):
         self.data_rescale=opt["data_rescale"]
         self.anchors=opt["anchors"]
         self.pos_threshold=opt["pos_threshold"]
+        self.single_video_name = video_name
         
         self._getDatasetDict()  
         self._loadFeaturelen(opt)                  
@@ -149,26 +150,49 @@ class VideoDataSet(data.Dataset):
         json.dump(self.video_len,outfile, indent=2)
         outfile.close()  
         
+ 
     def _getDatasetDict(self):
-        anno_database= load_json(self.video_anno_path)
-        anno_database=anno_database['database']
+        anno_database = load_json(self.video_anno_path)
+        anno_database = anno_database['database']
         self.video_dict = {}
-        for video_name in anno_database:
-            video_info=anno_database[video_name]
-            video_subset=anno_database[video_name]['subset']
-            if self.subset == "full":
-                self.video_dict[video_name] = video_info
-            if self.subset in video_subset:
-                self.video_dict[video_name] = video_info
-            
-            for seg in video_info['annotations']:
-                if not seg['label'] in self.label_name:
-                    self.label_name.append(seg['label'])
+        if self.single_video_name:
+            if self.single_video_name in anno_database:
+                video_info = anno_database[self.single_video_name]
+                video_subset = video_info['subset']
+                if self.subset == "full" or self.subset in video_subset:
+                    self.video_dict[self.single_video_name] = video_info
+                for seg in video_info['annotations']:
+                    if not seg['label'] in self.label_name:
+                        self.label_name.append(seg['label'])
+            else:
+                raise ValueError(f"Video {self.single_video_name} not found in annotation database")
+        else:
+            for video_name in anno_database:
+                video_info = anno_database[video_name]
+                video_subset = anno_database[video_name]['subset']
+                if self.subset == "full" or self.subset in video_subset:
+                    self.video_dict[video_name] = video_info
+                for seg in video_info['annotations']:
+                    if not seg['label'] in self.label_name:
+                        self.label_name.append(seg['label'])
         
-        self.label_name.sort()            
+        # Ensure all 22 EGTEA action classes are included
+        expected_labels = [
+            'Baseball Pitch', 'Basketball Dunk', 'Billiards', 'Clean and Jerk', 'Cliff Diving',
+            'CricketBowling', 'CricketShot', 'Diving', 'Frisbee Catch', 'Golf Swing',
+            'Hammer Throw', 'High Jump', 'Javelin Throw', 'Long Jump', 'Pole Vault',
+            'Shotput', 'Soccer Penalty', 'Tennis Swing', 'Throw Discus', 'Volleyball Spiking'
+        ]
+        for label in expected_labels:
+            if label not in self.label_name:
+                self.label_name.append(label)
+        
+        self.label_name.sort()
         self.video_list = list(self.video_dict.keys())
-        print ("%s subset video numbers: %d" %(self.subset,len(self.video_list)))
-    
+        print(f"Labels in dataset.label_name: {self.label_name}")
+        print(f"Number of labels: {len(self.label_name)}, Expected: {self.num_of_class-1}")
+        print(f"{self.subset} subset video numbers: {len(self.video_list)}")
+
     def _getMatchScore(self):
         self.action_end_count = torch.zeros(2)
         for index in range(0, len(self.video_list)):

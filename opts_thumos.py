@@ -8,6 +8,8 @@ def parse_opt():
         '--mode',
         type=str,
         default='train')
+    parser.add_argument('--video_name', type=str, default=None, help='Name of the single video to evaluate')
+    parser.add_argument('--video_path', type=str, default='', help='Path to the input video file for visualization')
     parser.add_argument(
         '--checkpoint_path',
         type=str,
@@ -59,6 +61,8 @@ def parse_opt():
         '--video_feature_all_test',
         type=str,
         default="./data/thumos_all_feature_test_V3.pickle")
+    parser.add_argument('--exp', type=str, default="")
+    parser.add_argument('--split', type=str, default="")
         
     #network
     parser.add_argument(
