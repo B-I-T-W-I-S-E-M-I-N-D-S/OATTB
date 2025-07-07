@@ -109,7 +109,7 @@ def eval_frame(opt, model, dataset):
     epoch_cost_reg = 0   
     
     for n_iter,(input_data,cls_label,reg_label) in enumerate(test_loader):
-        act_cls, act_reg, _ = model(input_data.cuda())
+        act_cls, act_reg= model(input_data.cuda())
         
         cost_reg = 0
         cost_cls = 0
