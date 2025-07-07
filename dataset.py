@@ -178,10 +178,10 @@ class VideoDataSet(data.Dataset):
         
         # Ensure all 22 EGTEA action classes are included
         expected_labels = [
-            'Baseball Pitch', 'Basketball Dunk', 'Billiards', 'Clean and Jerk', 'Cliff Diving',
-            'CricketBowling', 'CricketShot', 'Diving', 'Frisbee Catch', 'Golf Swing',
-            'Hammer Throw', 'High Jump', 'Javelin Throw', 'Long Jump', 'Pole Vault',
-            'Shotput', 'Soccer Penalty', 'Tennis Swing', 'Throw Discus', 'Volleyball Spiking'
+            'BaseballPitch', 'BasketballDunk', 'Billiards', 'CleanandJerk', 'CliffDiving',
+            'CricketBowling', 'CricketShot', 'Diving', 'FrisbeeCatch', 'GolfSwing',
+            'HammerThrow', 'HighJump', 'JavelinThrow', 'LongJump', 'PoleVault',
+            'Shotput', 'SoccerPenalty', 'TennisSwing', 'ThrowDiscus', 'VolleyballSpiking'
         ]
         for label in expected_labels:
             if label not in self.label_name:
