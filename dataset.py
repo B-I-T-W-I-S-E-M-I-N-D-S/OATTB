@@ -287,10 +287,10 @@ class VideoDataSet(data.Dataset):
         
         # Ensure all 22 EGTEA action classes are included
         expected_labels = [
-            'Clean/Wipe', 'Close', 'Compress', 'Crack', 'Cut', 'Divide/Pull Apart',
-            'Dry', 'Inspect/Read', 'Mix', 'Move Around', 'Open', 'Operate', 'Other',
-            'Pour', 'Put', 'Squeeze', 'Take', 'Transfer', 'Turn off', 'Turn on', 'Wash',
-            'Spread'  # Assumed missing label; replace with actual label if known
+            'BaseballPitch', 'BasketballDunk', 'Billiards', 'CleanandJerk', 'CliffDiving',
+            'CricketBowling', 'CricketShot', 'Diving', 'FrisbeeCatch', 'GolfSwing',
+            'HammerThrow', 'HighJump', 'JavelinThrow', 'LongJump', 'PoleVault',
+            'Shotput', 'SoccerPenalty', 'TennisSwing', 'ThrowDiscus', 'VolleyballSpiking'
         ]
         for label in expected_labels:
             if label not in self.label_name:
