@@ -63,6 +63,7 @@ def parse_opt():
         default="./data/thumos_all_feature_test_V3.pickle")
     parser.add_argument('--exp', type=str, default="")
     parser.add_argument('--split', type=str, default="")
+    parser.add_argument('--setup', type=str, default="")
         
     #network
     parser.add_argument(
