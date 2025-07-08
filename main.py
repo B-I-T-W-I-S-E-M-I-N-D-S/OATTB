@@ -1,3 +1,4 @@
+
 import os
 import json
 import torch
@@ -598,7 +599,7 @@ class ActionDetectionModel:
         epoch_cost_cls = 0
         epoch_cost_reg = 0
 
-        for n_iter, (input_data, cls_label, reg_label) in enumerate(tqdm(test_loader)):
+        for n_iter, (input_data, cls_label, reg_label, _) in enumerate(tqdm(test_loader)):
             input_data = input_data.to(device)
             cls_label = cls_label.to(device)
             reg_label = reg_label.to(device)
@@ -780,9 +781,7 @@ class ActionDetectionModel:
             raise HTTPException(status_code=400, detail="Model is not loaded")
         input_data = input_data.dict()
         video_path = input_data['video_path']
-        print(video_path)
         video_name = input_data['video_name'] or os.path.splitext(os.path.basename(video_path))[0]
-        print(video_name)
 
         if not os.path.exists(video_path):
             raise HTTPException(status_code=400, detail=f"Video path {video_path} does not exist")
@@ -1086,12 +1085,12 @@ async def startup():
     action_model.load_model()
     print("Action detection model loaded successfully")
     # Set the base URL for streaming
-    port = 8012
+    port = 8004
     ngrok_tunnel = ngrok.connect(port)
     action_model.set_base_url(ngrok_tunnel.public_url)
     print('Public URL:', ngrok_tunnel.public_url)
 
 if __name__ == '__main__':
-    port = 8012
+    port = 8004
     nest_asyncio.apply()
     uvicorn.run(app, port=port)
